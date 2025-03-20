@@ -1,5 +1,46 @@
 import { AddressBook } from './AddressBook.js';
+
 class Employee {
+    constructor(id, salary, gender, startDate) {
+        const idRegex = /^[1-9]\d*$/;  // Positive non-zero number
+        const salaryRegex = /^[1-9]\d*$/;  // Positive non-zero number
+        const genderRegex = /^[MF]$/;  // Gender must be 'M' or 'F'
+        const today = new Date();
+        const empDate = new Date(startDate);
+
+        try {
+            if (!idRegex.test(id.toString())) throw new Error("Employee ID must be a positive non-zero number.");
+            if (!salaryRegex.test(salary.toString())) throw new Error("Salary must be a positive non-zero number.");
+            if (!genderRegex.test(gender)) throw new Error("Gender must be 'M' or 'F'.");
+            if (empDate > today) throw new Error("Start date cannot be in the future.");
+
+            this.id = id;
+            this.salary = salary;
+            this.gender = gender;
+            this.startDate = empDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+            this.addressBook = new AddressBook(); // Each employee has an AddressBook
+        } catch (error) {
+            console.log("Error:", error.message);
+        }
+    }
+
+    toString() {
+        return `Employee ID: ${this.id}, Salary: ${this.salary}, Gender: ${this.gender}, Start Date: ${this.startDate}`;
+    }
+}
+
+// Example Usage
+try {
+    let emp1 = new Employee(101, 30000, "M", "2024-01-15");
+    console.log(emp1.toString());
+
+    let emp2 = new Employee(0, -5000, "X", "2026-01-01"); // Invalid Case
+
+} catch (error) {
+    console.log("Error:", error.message);
+}
+
+class EmployeeWage {
     constructor() {
         this.dailyWageArray = [];
         this.fullTimeWageArray = [];
@@ -65,7 +106,7 @@ try {
     let emp1 = new Employee(101, 30000, "M", "2024-01-15");
     console.log(emp1.toString());
 
-    let empWage = new Employee();
+    let empWage = new EmployeeWage();
     empWage.calculateWages();
     empWage.showDailyWage();
 
@@ -76,17 +117,8 @@ try {
     console.log("\nDoes the employee have Part Time Wage?:", empWage.hasPartTimeWage());
     console.log("\nTotal working Days:", empWage.getWorkingDays());
 
-    console.log("\nAdding Contacts to Employee's Address Book...");
-    let contact1 = new Contact("John", "Doe", "Pakistan", "Bhutan", "California", "211010", "1234567890", "john@gmail.com");
-    let contact2 = new Contact("Marry", "Das", "New York", "New York", "New York", "281406", "9876543210", "marry@gmail.com");
-
-    emp1.addressBook.addContact(contact1);
-    emp1.addressBook.addContact(contact2);
-
-    console.log("\nDisplaying Employee's Address Book:");
-    emp1.addressBook.displayContacts();
 } catch (error) {
     console.log("Error:", error.message);
 }
 
-export { Employee };
+export { Employee , EmployeeWage };
