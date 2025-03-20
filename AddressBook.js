@@ -1,7 +1,6 @@
 class AddressBookSystem {
     constructor() {
-        // Stores multiple address books
-        this.addressBooks = {};
+        this.addressBooks = {}; // Stores multiple address books
     }
 
     /**
@@ -18,7 +17,7 @@ class AddressBookSystem {
     }
 
     /**
-     * Validates the contact details before adding.
+     * Validates the contact details before adding or updating.
      * Throws an error if validation fails.
      */
     validateContact(firstName, lastName, address, city, state, zip, phone, email) {
@@ -40,15 +39,6 @@ class AddressBookSystem {
 
     /**
      * Adds a new contact to a specific address book.
-     * @param {string} bookName - Name of the address book
-     * @param {string} firstName - First name of the contact
-     * @param {string} lastName - Last name of the contact
-     * @param {string} address - Street address of the contact
-     * @param {string} city - City of the contact
-     * @param {string} state - State of the contact
-     * @param {string} zip - ZIP code of the contact
-     * @param {string} phone - Phone number of the contact
-     * @param {string} email - Email address of the contact
      */
     addContact(bookName, firstName, lastName, address, city, state, zip, phone, email) {
         if (!this.addressBooks[bookName]) {
@@ -67,8 +57,79 @@ class AddressBookSystem {
     }
 
     /**
-     * Displays all contacts from a specific Address Book.
+     * Finds a contact by name in the given Address Book.
      * @param {string} bookName - Name of the address book
+     * @param {string} firstName - First name of the contact
+     * @param {string} lastName - Last name of the contact
+     * @returns {object|null} - Returns contact object if found, otherwise null
+     */
+    findContact(bookName, firstName, lastName) {
+        if (!this.addressBooks[bookName]) {
+            console.log(`Address Book "${bookName}" does not exist.`);
+            return null;
+        }
+
+        const contact = this.addressBooks[bookName].find(
+            (c) => c.firstName === firstName && c.lastName === lastName
+        );
+
+        if (contact) {
+            console.log("Contact Found:", contact);
+            return contact;
+        } else {
+            console.log(`Contact "${firstName} ${lastName}" not found in "${bookName}".`);
+            return null;
+        }
+    }
+
+    /**
+     * Edits an existing contact in the given Address Book.
+     * @param {string} bookName - Name of the address book
+     * @param {string} firstName - First name of the contact to find
+     * @param {string} lastName - Last name of the contact to find
+     * @param {object} newDetails - Object containing new contact details
+     */
+    editContact(bookName, firstName, lastName, newDetails) {
+        if (!this.addressBooks[bookName]) {
+            console.log(`Address Book "${bookName}" does not exist.`);
+            return;
+        }
+
+        const contactIndex = this.addressBooks[bookName].findIndex(
+            (c) => c.firstName === firstName && c.lastName === lastName
+        );
+
+        if (contactIndex !== -1) {
+            try {
+                // Validate new details before updating
+                this.validateContact(
+                    newDetails.firstName || firstName,
+                    newDetails.lastName || lastName,
+                    newDetails.address || this.addressBooks[bookName][contactIndex].address,
+                    newDetails.city || this.addressBooks[bookName][contactIndex].city,
+                    newDetails.state || this.addressBooks[bookName][contactIndex].state,
+                    newDetails.zip || this.addressBooks[bookName][contactIndex].zip,
+                    newDetails.phone || this.addressBooks[bookName][contactIndex].phone,
+                    newDetails.email || this.addressBooks[bookName][contactIndex].email
+                );
+
+                // Update the contact details
+                this.addressBooks[bookName][contactIndex] = {
+                    ...this.addressBooks[bookName][contactIndex],
+                    ...newDetails
+                };
+
+                console.log(`Contact "${firstName} ${lastName}" updated successfully in "${bookName}".`);
+            } catch (error) {
+                console.error(error.message);
+            }
+        } else {
+            console.log(`Contact "${firstName} ${lastName}" not found in "${bookName}".`);
+        }
+    }
+
+    /**
+     * Displays all contacts from a specific Address Book.
      */
     displayContacts(bookName) {
         if (!this.addressBooks[bookName]) {
@@ -92,6 +153,14 @@ mySystem.createAddressBook("Work");
 mySystem.addContact("Family", "John", "Doe", "123 Main St", "New York", "New York", "10001", "123-456-7890", "john.doe@example.com");
 mySystem.addContact("Work", "Alice", "Smith", "456 Office Rd", "Los Angeles", "California", "90002", "987-654-3210", "alice.smith@workmail.com");
 
-// Display Contacts
+// Find and Edit a Contact
+mySystem.findContact("Family", "John", "Doe"); // Should print the contact
+
+// Update John's address and phone number
+mySystem.editContact("Family", "John", "Doe", {
+    address: "789 New St",
+    phone: "111-222-3333"
+});
+
+// Display updated contacts
 mySystem.displayContacts("Family");
-mySystem.displayContacts("Work");
