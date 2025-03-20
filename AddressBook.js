@@ -105,6 +105,26 @@ class AddressBook {
         console.log(`Number of contacts: ${this.contacts.length}`);
         return this.contacts.length;
     }
+
+    searchByCity(city) {
+        const results = this.contacts.filter(contact => contact.city === city);
+        if (results.length > 0) {
+            console.log(`Contacts in ${city}:`, results.map(contact => `${contact.firstName} ${contact.lastName}`));
+        } else {
+            console.log(`No contacts found in ${city}.`);
+        }
+        return results;
+    }
+
+    searchByState(state) {
+        const results = this.contacts.filter(contact => contact.state === state);
+        if (results.length > 0) {
+            console.log(`Contacts in ${state}:`, results.map(contact => `${contact.firstName} ${contact.lastName}`));
+        } else {
+            console.log(`No contacts found in ${state}.`);
+        }
+        return results;
+    }
 }
 
 // Example Usage
@@ -113,12 +133,16 @@ const myAddressBook = new AddressBook();
 // Add Contacts
 myAddressBook.addContact("John", "Doe", "123 Main St", "New York", "New York", "10001", "123-456-7890", "john.doe@example.com");
 myAddressBook.addContact("Emma", "Johnson", "789 Park Ave", "Los Angeles", "California", "90002", "222-333-4444", "emma.johnson@email.com");
+myAddressBook.addContact("Michael", "Smith", "321 Oak St", "New York", "New York", "10003", "555-666-7777", "michael.smith@email.com");
 
-// Attempt Duplicate Entry
-myAddressBook.addContact("John", "Doe", "456 Elm St", "Chicago", "Ireland", "60601", "321-654-9870", "john.duplicate@example.com"); // Should not add
+// Search by City
+myAddressBook.searchByCity("New York"); // Should list John Doe & Michael Smith
+
+// Search by State
+myAddressBook.searchByState("California"); // Should list Emma Johnson
 
 // Count Contacts
-myAddressBook.countContacts(); // Should print 2
+myAddressBook.countContacts(); // Should print 3
 
 // Edit Contact
 myAddressBook.editContact("John", "Doe", { address: "456 Updated St", phone: "999-888-7777" });
@@ -130,4 +154,4 @@ myAddressBook.findContact("John", "Doe");
 myAddressBook.deleteContact("Emma", "Johnson");
 
 // Count Contacts Again
-myAddressBook.countContacts(); // Should print 1
+myAddressBook.countContacts(); // Should print 2
