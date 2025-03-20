@@ -155,6 +155,30 @@ class AddressBook {
         console.log("\nSorted Contacts:");
         this.contacts.forEach(contact => console.log(`${contact.firstName} ${contact.lastName}`));
     }
+
+    // Sort Contacts by City
+    sortContactsByCity() {
+        this.contacts.sort((a, b) => a.city.localeCompare(b.city));
+
+        console.log("\nSorted Contacts by City:");
+        this.contacts.forEach(contact => console.log(`${contact.firstName} ${contact.lastName} - ${contact.city}`));
+    }
+
+    // Sort Contacts by State
+    sortContactsByState() {
+        this.contacts.sort((a, b) => a.state.localeCompare(b.state));
+
+        console.log("\nSorted Contacts by State:");
+        this.contacts.forEach(contact => console.log(`${contact.firstName} ${contact.lastName} - ${contact.state}`));
+    }
+
+    // Sort Contacts by Zip Code
+    sortContactsByZip() {
+        this.contacts.sort((a, b) => a.zip.localeCompare(b.zip));
+
+        console.log("\nSorted Contacts by Zip Code:");
+        this.contacts.forEach(contact => console.log(`${contact.firstName} ${contact.lastName} - Zip: ${contact.zip}`));
+    }
 }
 
 // Example Usage
@@ -169,6 +193,14 @@ myAddressBook.addContact("Alice", "Brown", "555 Elm St", "San Francisco", "Calif
 // Sort contacts alphabetically
 myAddressBook.sortContactsByName();
 
+// Sort by City
+myAddressBook.sortContactsByCity();
+
+// Sort by State
+myAddressBook.sortContactsByState();
+
+// Sort by Zip
+myAddressBook.sortContactsByZip();
 
 // Search by City
 console.log("Searching for contacts in New York:", myAddressBook.searchByCity("New York"));
