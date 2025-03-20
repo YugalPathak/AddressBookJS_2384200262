@@ -117,15 +117,17 @@ class AddressBook {
 
     // View Persons by City or State
     viewPersonsByCity(city) {
-        const persons = this.searchByCity(city).map(contact => `${contact.firstName} ${contact.lastName}`);
-        console.log(`Persons in ${city}:`, persons.length ? persons : "No contacts found.");
-        return persons;
+        console.log(`Persons in ${city}:`);
+        this.contacts.forEach(contact => {
+            if (contact.city === city) console.log(`${contact.firstName} ${contact.lastName}`);
+        });
     }
 
     viewPersonsByState(state) {
-        const persons = this.searchByState(state).map(contact => `${contact.firstName} ${contact.lastName}`);
-        console.log(`Persons in ${state}:`, persons.length ? persons : "No contacts found.");
-        return persons;
+        console.log(`Persons in ${state}:`);
+        this.contacts.forEach(contact => {
+            if (contact.state === state) console.log(`${contact.firstName} ${contact.lastName}`);
+        });
     }
 
     // Count Persons by City or State
@@ -140,6 +142,19 @@ class AddressBook {
         console.log(`Number of contacts in ${state}: ${count}`);
         return count;
     }
+
+    // Sort Contacts Alphabetically by First Name, then Last Name
+    sortContactsByName() {
+        this.contacts.sort((a, b) => {
+            if (a.firstName !== b.firstName) {
+                return a.firstName.localeCompare(b.firstName);
+            }
+            return a.lastName.localeCompare(b.lastName);
+        });
+
+        console.log("\nSorted Contacts:");
+        this.contacts.forEach(contact => console.log(`${contact.firstName} ${contact.lastName}`));
+    }
 }
 
 // Example Usage
@@ -149,6 +164,11 @@ const myAddressBook = new AddressBook();
 myAddressBook.addContact("John", "Doe", "123 Main St", "New York", "New York", "10001", "123-456-7890", "john.doe@example.com");
 myAddressBook.addContact("Emma", "Johnson", "789 Park Ave", "Los Angeles", "California", "90002", "222-333-4444", "emma.johnson@email.com");
 myAddressBook.addContact("Michael", "Smith", "321 Oak St", "New York", "New York", "10003", "555-666-7777", "michael.smith@email.com");
+myAddressBook.addContact("Alice", "Brown", "555 Elm St", "San Francisco", "California", "94101", "777-888-9999", "alice.brown@email.com");
+
+// Sort contacts alphabetically
+myAddressBook.sortContactsByName();
+
 
 // Search by City
 console.log("Searching for contacts in New York:", myAddressBook.searchByCity("New York"));
