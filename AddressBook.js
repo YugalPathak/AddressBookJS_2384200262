@@ -101,12 +101,6 @@ class AddressBookSystem {
         }
     }
 
-    /**
-     * Deletes a contact from a specific Address Book.
-     * @param {string} bookName - Name of the address book
-     * @param {string} firstName - First name of the contact
-     * @param {string} lastName - Last name of the contact
-     */
     deleteContact(bookName, firstName, lastName) {
         if (!this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" does not exist.`);
@@ -134,6 +128,21 @@ class AddressBookSystem {
         console.log(`Contacts in Address Book "${bookName}":`);
         console.table(this.addressBooks[bookName]);
     }
+
+    /**
+     * Counts the number of contacts in a given address book.
+     * @param {string} bookName - Name of the address book
+     */
+    countContacts(bookName) {
+        if (!this.addressBooks[bookName]) {
+            console.log(`Address Book "${bookName}" does not exist.`);
+            return 0;
+        }
+
+        const count = this.addressBooks[bookName].length;
+        console.log(`Number of contacts in "${bookName}": ${count}`);
+        return count;
+    }
 }
 
 // Example Usage
@@ -147,20 +156,17 @@ mySystem.createAddressBook("Work");
 mySystem.addContact("Family", "John", "Doe", "123 Main St", "New York", "New York", "10001", "123-456-7890", "john.doe@example.com");
 mySystem.addContact("Work", "Alice", "Smith", "456 Office Rd", "Los Angeles", "California", "90002", "987-654-3210", "alice.smith@workmail.com");
 
-// Find and Edit a Contact
-mySystem.findContact("Family", "John", "Doe"); // Should print the contact
+// Count Contacts
+mySystem.countContacts("Family"); // Should print 1
+mySystem.countContacts("Work");   // Should print 1
 
-// Update John's address and phone number
-mySystem.editContact("Family", "John", "Doe", {
-    address: "789 New St",
-    phone: "111-222-3333"
-});
+// Add another contact and count again
+mySystem.addContact("Family", "Emma", "Johnson", "789 Park Ave", "Chicago", "Ireland", "60007", "222-333-4444", "emma.johnson@email.com");
+mySystem.countContacts("Family"); // Should print 2
 
-// Display updated contacts
+// Display Contacts
 mySystem.displayContacts("Family");
 
-// Delete a contact
+// Delete a contact and count again
 mySystem.deleteContact("Family", "John", "Doe");
-
-// Display contacts after deletion
-mySystem.displayContacts("Family");
+mySystem.countContacts("Family"); // Should print 1
