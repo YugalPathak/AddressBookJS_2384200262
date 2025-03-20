@@ -4,7 +4,7 @@ class AddressBook {
     }
 
     validateContact(firstName, lastName, address, city, state, zip, phone, email) {
-        const namePattern = /^[A-Z][a-zA-Z]{2,}$/; 
+        const namePattern = /^[A-Z][a-zA-Z]{2,}$/;
         const addressPattern = /^.{4,}$/;
         const zipPattern = /^[0-9]{5,6}$/;
         const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
@@ -106,7 +106,7 @@ class AddressBook {
         return this.contacts.length;
     }
 
-    // UC8: Search Person in a Particular City or State
+    // Search Person in a Particular City or State
     searchByCity(city) {
         return this.contacts.filter(contact => contact.city === city);
     }
@@ -115,7 +115,7 @@ class AddressBook {
         return this.contacts.filter(contact => contact.state === state);
     }
 
-    // UC9: View Persons by City or State
+    // View Persons by City or State
     viewPersonsByCity(city) {
         const persons = this.searchByCity(city).map(contact => `${contact.firstName} ${contact.lastName}`);
         console.log(`Persons in ${city}:`, persons.length ? persons : "No contacts found.");
@@ -127,6 +127,19 @@ class AddressBook {
         console.log(`Persons in ${state}:`, persons.length ? persons : "No contacts found.");
         return persons;
     }
+
+    // Count Persons by City or State
+    countByCity(city) {
+        const count = this.contacts.filter(contact => contact.city === city).length;
+        console.log(`Number of contacts in ${city}: ${count}`);
+        return count;
+    }
+
+    countByState(state) {
+        const count = this.contacts.filter(contact => contact.state === state).length;
+        console.log(`Number of contacts in ${state}: ${count}`);
+        return count;
+    }
 }
 
 // Example Usage
@@ -137,17 +150,23 @@ myAddressBook.addContact("John", "Doe", "123 Main St", "New York", "New York", "
 myAddressBook.addContact("Emma", "Johnson", "789 Park Ave", "Los Angeles", "California", "90002", "222-333-4444", "emma.johnson@email.com");
 myAddressBook.addContact("Michael", "Smith", "321 Oak St", "New York", "New York", "10003", "555-666-7777", "michael.smith@email.com");
 
-// UC8: Search by City
+// Search by City
 console.log("Searching for contacts in New York:", myAddressBook.searchByCity("New York"));
 
-// UC8: Search by State
+// Search by State
 console.log("Searching for contacts in California:", myAddressBook.searchByState("California"));
 
-// UC9: View Persons by City
+// View Persons by City
 myAddressBook.viewPersonsByCity("New York");
 
-// UC9: View Persons by State
+// View Persons by State
 myAddressBook.viewPersonsByState("California");
+
+// Count Persons by City
+myAddressBook.countByCity("New York");
+
+// Count Persons by State
+myAddressBook.countByState("California");
 
 // Count Contacts
 myAddressBook.countContacts();
