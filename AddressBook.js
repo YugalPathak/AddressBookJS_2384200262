@@ -3,10 +3,6 @@ class AddressBookSystem {
         this.addressBooks = {}; // Stores multiple address books
     }
 
-    /**
-     * Creates a new Address Book with a unique name.
-     * @param {string} bookName - Name of the new address book
-     */
     createAddressBook(bookName) {
         if (this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" already exists.`);
@@ -16,10 +12,6 @@ class AddressBookSystem {
         }
     }
 
-    /**
-     * Validates the contact details before adding or updating.
-     * Throws an error if validation fails.
-     */
     validateContact(firstName, lastName, address, city, state, zip, phone, email) {
         const namePattern = /^[A-Z][a-zA-Z]{2,}$/; // Starts with capital, min 3 characters
         const addressPattern = /^.{4,}$/; // Min 4 characters
@@ -37,9 +29,6 @@ class AddressBookSystem {
         if (!emailPattern.test(email)) throw new Error("Invalid Email Address! Should be in a valid format.");
     }
 
-    /**
-     * Adds a new contact to a specific address book.
-     */
     addContact(bookName, firstName, lastName, address, city, state, zip, phone, email) {
         if (!this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" does not exist. Create it first.`);
@@ -56,13 +45,6 @@ class AddressBookSystem {
         }
     }
 
-    /**
-     * Finds a contact by name in the given Address Book.
-     * @param {string} bookName - Name of the address book
-     * @param {string} firstName - First name of the contact
-     * @param {string} lastName - Last name of the contact
-     * @returns {object|null} - Returns contact object if found, otherwise null
-     */
     findContact(bookName, firstName, lastName) {
         if (!this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" does not exist.`);
@@ -82,13 +64,6 @@ class AddressBookSystem {
         }
     }
 
-    /**
-     * Edits an existing contact in the given Address Book.
-     * @param {string} bookName - Name of the address book
-     * @param {string} firstName - First name of the contact to find
-     * @param {string} lastName - Last name of the contact to find
-     * @param {object} newDetails - Object containing new contact details
-     */
     editContact(bookName, firstName, lastName, newDetails) {
         if (!this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" does not exist.`);
@@ -101,7 +76,6 @@ class AddressBookSystem {
 
         if (contactIndex !== -1) {
             try {
-                // Validate new details before updating
                 this.validateContact(
                     newDetails.firstName || firstName,
                     newDetails.lastName || lastName,
@@ -113,7 +87,6 @@ class AddressBookSystem {
                     newDetails.email || this.addressBooks[bookName][contactIndex].email
                 );
 
-                // Update the contact details
                 this.addressBooks[bookName][contactIndex] = {
                     ...this.addressBooks[bookName][contactIndex],
                     ...newDetails
@@ -129,8 +102,29 @@ class AddressBookSystem {
     }
 
     /**
-     * Displays all contacts from a specific Address Book.
+     * Deletes a contact from a specific Address Book.
+     * @param {string} bookName - Name of the address book
+     * @param {string} firstName - First name of the contact
+     * @param {string} lastName - Last name of the contact
      */
+    deleteContact(bookName, firstName, lastName) {
+        if (!this.addressBooks[bookName]) {
+            console.log(`Address Book "${bookName}" does not exist.`);
+            return;
+        }
+
+        const contactIndex = this.addressBooks[bookName].findIndex(
+            (c) => c.firstName === firstName && c.lastName === lastName
+        );
+
+        if (contactIndex !== -1) {
+            this.addressBooks[bookName].splice(contactIndex, 1);
+            console.log(`Contact "${firstName} ${lastName}" deleted successfully from "${bookName}".`);
+        } else {
+            console.log(`Contact "${firstName} ${lastName}" not found in "${bookName}".`);
+        }
+    }
+
     displayContacts(bookName) {
         if (!this.addressBooks[bookName]) {
             console.log(`Address Book "${bookName}" does not exist.`);
@@ -163,4 +157,10 @@ mySystem.editContact("Family", "John", "Doe", {
 });
 
 // Display updated contacts
+mySystem.displayContacts("Family");
+
+// Delete a contact
+mySystem.deleteContact("Family", "John", "Doe");
+
+// Display contacts after deletion
 mySystem.displayContacts("Family");
