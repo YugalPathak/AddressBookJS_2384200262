@@ -4,20 +4,20 @@ class AddressBook {
     }
 
     validateContact(firstName, lastName, address, city, state, zip, phone, email) {
-        const namePattern = /^[A-Z][a-zA-Z]{2,}$/; // First letter capital, min 3 characters
-        const addressPattern = /^.{4,}$/; // Min 4 characters
-        const zipPattern = /^[0-9]{5,6}$/; // 5-6 digit zip code
-        const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/; // Format: 123-456-7890
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Valid email format
+        const namePattern = /^[A-Z][a-zA-Z]{2,}$/; 
+        const addressPattern = /^.{4,}$/;
+        const zipPattern = /^[0-9]{5,6}$/;
+        const phonePattern = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        if (!namePattern.test(firstName)) throw new Error("Invalid First Name! Should start with a capital letter and have at least 3 characters.");
-        if (!namePattern.test(lastName)) throw new Error("Invalid Last Name! Should start with a capital letter and have at least 3 characters.");
-        if (!addressPattern.test(address)) throw new Error("Invalid Address! Should have at least 4 characters.");
-        if (!addressPattern.test(city)) throw new Error("Invalid City! Should have at least 4 characters.");
-        if (!addressPattern.test(state)) throw new Error("Invalid State! Should have at least 4 characters.");
-        if (!zipPattern.test(zip)) throw new Error("Invalid Zip Code! Should be 5 or 6 digits.");
-        if (!phonePattern.test(phone)) throw new Error("Invalid Phone Number! Use format: 123-456-7890.");
-        if (!emailPattern.test(email)) throw new Error("Invalid Email Address! Should be in a valid format.");
+        if (!namePattern.test(firstName)) throw new Error("Invalid First Name!");
+        if (!namePattern.test(lastName)) throw new Error("Invalid Last Name!");
+        if (!addressPattern.test(address)) throw new Error("Invalid Address!");
+        if (!addressPattern.test(city)) throw new Error("Invalid City!");
+        if (!addressPattern.test(state)) throw new Error("Invalid State!");
+        if (!zipPattern.test(zip)) throw new Error("Invalid Zip Code!");
+        if (!phonePattern.test(phone)) throw new Error("Invalid Phone Number!");
+        if (!emailPattern.test(email)) throw new Error("Invalid Email Address!");
     }
 
     checkDuplicate(firstName, lastName) {
@@ -106,24 +106,26 @@ class AddressBook {
         return this.contacts.length;
     }
 
+    // UC8: Search Person in a Particular City or State
     searchByCity(city) {
-        const results = this.contacts.filter(contact => contact.city === city);
-        if (results.length > 0) {
-            console.log(`Contacts in ${city}:`, results.map(contact => `${contact.firstName} ${contact.lastName}`));
-        } else {
-            console.log(`No contacts found in ${city}.`);
-        }
-        return results;
+        return this.contacts.filter(contact => contact.city === city);
     }
 
     searchByState(state) {
-        const results = this.contacts.filter(contact => contact.state === state);
-        if (results.length > 0) {
-            console.log(`Contacts in ${state}:`, results.map(contact => `${contact.firstName} ${contact.lastName}`));
-        } else {
-            console.log(`No contacts found in ${state}.`);
-        }
-        return results;
+        return this.contacts.filter(contact => contact.state === state);
+    }
+
+    // UC9: View Persons by City or State
+    viewPersonsByCity(city) {
+        const persons = this.searchByCity(city).map(contact => `${contact.firstName} ${contact.lastName}`);
+        console.log(`Persons in ${city}:`, persons.length ? persons : "No contacts found.");
+        return persons;
+    }
+
+    viewPersonsByState(state) {
+        const persons = this.searchByState(state).map(contact => `${contact.firstName} ${contact.lastName}`);
+        console.log(`Persons in ${state}:`, persons.length ? persons : "No contacts found.");
+        return persons;
     }
 }
 
@@ -135,14 +137,20 @@ myAddressBook.addContact("John", "Doe", "123 Main St", "New York", "New York", "
 myAddressBook.addContact("Emma", "Johnson", "789 Park Ave", "Los Angeles", "California", "90002", "222-333-4444", "emma.johnson@email.com");
 myAddressBook.addContact("Michael", "Smith", "321 Oak St", "New York", "New York", "10003", "555-666-7777", "michael.smith@email.com");
 
-// Search by City
-myAddressBook.searchByCity("New York"); // Should list John Doe & Michael Smith
+// UC8: Search by City
+console.log("Searching for contacts in New York:", myAddressBook.searchByCity("New York"));
 
-// Search by State
-myAddressBook.searchByState("California"); // Should list Emma Johnson
+// UC8: Search by State
+console.log("Searching for contacts in California:", myAddressBook.searchByState("California"));
+
+// UC9: View Persons by City
+myAddressBook.viewPersonsByCity("New York");
+
+// UC9: View Persons by State
+myAddressBook.viewPersonsByState("California");
 
 // Count Contacts
-myAddressBook.countContacts(); // Should print 3
+myAddressBook.countContacts();
 
 // Edit Contact
 myAddressBook.editContact("John", "Doe", { address: "456 Updated St", phone: "999-888-7777" });
@@ -154,4 +162,4 @@ myAddressBook.findContact("John", "Doe");
 myAddressBook.deleteContact("Emma", "Johnson");
 
 // Count Contacts Again
-myAddressBook.countContacts(); // Should print 2
+myAddressBook.countContacts();
